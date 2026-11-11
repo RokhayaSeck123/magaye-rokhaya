@@ -235,6 +235,8 @@ h2{font-family:var(--script);font-weight:400;font-size:clamp(42px,12cqi,54px);li
 .closing .names{font-family:var(--display);font-size:clamp(26px,7.5cqi,34px);color:var(--ink-deep);letter-spacing:.06em;margin-top:2px}
 .closing .d{font-family:var(--display);letter-spacing:.3em;color:var(--gold);font-size:13px;margin-top:10px}
 .foot{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);margin-top:18px}
+.sound-toggle{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));z-index:30;border:1px solid var(--gold);border-radius:30px;padding:9px 14px;background:rgba(63,40,24,.92);color:var(--gold-light);font:600 12px var(--body);letter-spacing:.08em;cursor:pointer;box-shadow:0 3px 12px rgba(63,40,24,.2)}
+.sound-toggle:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 </style>
 
 <!-- ============ ENVELOPE ============ -->
@@ -273,6 +275,9 @@ h2{font-family:var(--script);font-weight:400;font-size:clamp(42px,12cqi,54px);li
     <span class="ring" aria-hidden="true"></span>
   </button>
 </div>
+
+<audio id="musique" src="assets/musique.mp3" preload="auto"></audio>
+<button class="sound-toggle" id="soundToggle" type="button" aria-label="Couper le son" aria-pressed="true" hidden>♫ Son activé</button>
 
 <main class="page">
   <!-- ============ HERO ============ -->
@@ -759,6 +764,16 @@ h2{font-family:var(--script);font-weight:400;font-size:clamp(42px,12cqi,54px);li
 
   /* ---------- envelope: bow drops, doors open, card rises and fills the screen ---------- */
   var ov=document.getElementById('enveloppe'),btn=document.getElementById('envBtn'),card=document.getElementById('envCard');
+  var audio=document.getElementById('musique'),soundToggle=document.getElementById('soundToggle');
+  audio.volume=.7;
+  function startMusic(){var p=audio.play();if(p&&p.then)p.then(function(){soundToggle.hidden=false;}).catch(function(){});}
+  soundToggle.addEventListener('click',function(){
+    if(audio.paused){startMusic();return;}
+    audio.muted=!audio.muted;
+    soundToggle.textContent=audio.muted?'♫ Son coupé':'♫ Son activé';
+    soundToggle.setAttribute('aria-label',audio.muted?'Activer le son':'Couper le son');
+    soundToggle.setAttribute('aria-pressed',String(!audio.muted));
+  });
   document.body.classList.add('locked','pre');
   function finish(){opened=true;ov.hidden=true;document.body.classList.remove('locked');requestAnimationFrame(function(){document.body.classList.remove('pre');startFx();});}
   function flyCard(){
@@ -774,6 +789,7 @@ h2{font-family:var(--script);font-weight:400;font-size:clamp(42px,12cqi,54px);li
   }
   btn.addEventListener('click',function(){
     if(ov.classList.contains('drop'))return;
+    startMusic();
     if(reduce){finish();return;}
     paintCard();
     ov.classList.add('drop');
