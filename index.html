@@ -630,7 +630,7 @@ h2{font-family:var(--script);font-weight:400;font-size:clamp(42px,12cqi,54px);li
     var k=sizeCanvas(cv);if(!k)return;
     var O=offscreen(cv,k),off=O.off,oc=O.oc;
     var sc=k.w/300,ox=k.w/2,oy=k.h*.34,S=new Scene();
-    var SAT=satin([.97,.94,.87],[.82,.76,.63]);
+    var SAT=satin([.86,.69,.4],[.74,.58,.33]);
     [-1,1].forEach(function(side){
       var lp=function(t){var th=t*2*Math.PI,u=(1-Math.cos(th))/2;return[side*(-98*u),-34*Math.sin(th)*(.45+.55*u)-30*u,22*Math.sin(th)+6*u];};
       S.strip(function(t){var g=tw(lp,t),u=(1-Math.cos(t*2*Math.PI))/2;return{p:g.p,w:wvec(g.np,.5,27*(.2+.8*Math.pow(u,.5)))};},180,10,SAT);
@@ -641,8 +641,8 @@ h2{font-family:var(--script);font-weight:400;font-size:clamp(42px,12cqi,54px);li
     S.draw(oc,ox,oy,sc);
     // gathered folds on the knot
     oc.lineCap='round';
-    [[-5,.2],[0,.13],[4,.18]].forEach(function(f){oc.beginPath();oc.moveTo(ox+f[0]*sc,oy-13*sc);oc.quadraticCurveTo(ox+(f[0]+2)*sc,oy,ox+f[0]*sc,oy+14*sc);oc.strokeStyle='rgba(120,89,43,'+f[1]+')';oc.lineWidth=2*sc;oc.stroke();});
-    var c=k.c;c.save();c.shadowColor='rgba(63,40,24,.26)';c.shadowBlur=12*sc;c.shadowOffsetY=6*sc;c.drawImage(off,0,0,k.w,k.h);c.restore();
+    [[-5,.26],[0,.16],[4,.24]].forEach(function(f){oc.beginPath();oc.moveTo(ox+f[0]*sc,oy-13*sc);oc.quadraticCurveTo(ox+(f[0]+2)*sc,oy,ox+f[0]*sc,oy+14*sc);oc.strokeStyle='rgba(90,60,20,'+f[1]+')';oc.lineWidth=2*sc;oc.stroke();});
+    var c=k.c;c.save();c.shadowColor='rgba(63,40,24,.38)';c.shadowBlur=12*sc;c.shadowOffsetY=6*sc;c.drawImage(off,0,0,k.w,k.h);c.restore();
   }
   function ring(S,C,R,ax,hw,mat){
     ax=nz(ax);var e1=nz(cr(ax,Math.abs(ax[2])>.9?[1,0,0]:[0,0,1])),e2=cr(ax,e1),th=R*.11;
