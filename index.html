@@ -113,11 +113,13 @@ p{margin:0}
 .bow-in{display:block;width:100%;height:100%;transform-origin:50% 34%}
 .overlay:not(.drop) .bow-in{animation:sway 3.6s ease-in-out infinite}
 @keyframes sway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+.overlay.drop .bow-in{animation:bowloosen .42s ease-out both}
+@keyframes bowloosen{0%{transform:scale(1)}35%{transform:scaleX(1.1) scaleY(.9) rotate(4deg)}100%{transform:scaleX(.96) scaleY(.98) rotate(-3deg)}}
 .ring{position:absolute;left:50%;top:56%;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;border:1.5px solid rgba(255,246,220,.95);box-shadow:0 0 12px rgba(181,138,60,.6);animation:ring 2s ease-out infinite;z-index:7}
 @keyframes ring{0%{transform:scale(.6);opacity:.9}100%{transform:scale(1.8);opacity:0}}
 .overlay.drop .ring{display:none}
 .overlay.open .ribbon{display:none}
-.overlay.drop .bow{animation:bowfall 1.1s cubic-bezier(.45,0,.85,.45) forwards}
+.overlay.drop .bow{animation:bowfall 1.1s cubic-bezier(.45,0,.85,.45) .18s forwards}
 .overlay.drop .band{animation:bandfall 1.2s cubic-bezier(.45,0,.85,.45) .08s forwards}
 @keyframes bowfall{0%{transform:translate(-50%,-34%)}14%{transform:translate(-50%,-40%) rotate(-3deg) scale(1.03)}100%{transform:translate(-44%,140vh) rotate(24deg)}}
 @keyframes bandfall{0%{transform:translateY(-50%)}100%{transform:translateY(140vh) rotate(7deg)}}
@@ -632,7 +634,7 @@ h2{font-family:var(--script);font-weight:400;font-size:clamp(42px,12cqi,54px);li
     var sc=k.w/300,ox=k.w/2,oy=k.h*.34,S=new Scene();
     var SAT=satin([.86,.69,.4],[.74,.58,.33]);
     [-1,1].forEach(function(side){
-      var lp=function(t){var th=t*2*Math.PI,u=(1-Math.cos(th))/2;return[side*(-98*u),-34*Math.sin(th)*(.45+.55*u)-30*u,22*Math.sin(th)+6*u];};
+      var lp=function(t){var th=t*2*Math.PI,u=(1-Math.cos(th))/2,wide=side<0?98:91,tall=side<0?34:30,soft=Math.sin(2*th+side*.7)*2.2*Math.sin(th);return[side*(-wide*u),-tall*Math.sin(th)*(.45+.55*u)-30*u+soft,22*Math.sin(th)+6*u+1.8*Math.sin(2*th+side)];};
       S.strip(function(t){var g=tw(lp,t),u=(1-Math.cos(t*2*Math.PI))/2;return{p:g.p,w:wvec(g.np,.5,27*(.2+.8*Math.pow(u,.5)))};},180,10,SAT);
       var tl=function(t){return side<0?[-4-66*t-10*Math.sin(Math.PI*t),8+150*t,-8-18*t]:[4+56*t+12*Math.sin(Math.PI*t),8+124*t,-8-18*t];};
       S.strip(function(t){var g=tw(tl,t);return{p:g.p,w:wvec(g.np,side*(.15-.9*t*t),16+3*t)};},120,20,SAT,function(s){return .88+.12*Math.abs(s);});
