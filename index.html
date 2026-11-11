@@ -799,7 +799,7 @@ h2{font-family:var(--script);font-weight:400;font-size:clamp(42px,12cqi,54px);li
 
 
   /* ---------- "Ordinary" via the official YouTube player ---------- */
-  var SONG_ID='u2ah9tWTkmk',SONG_START=0,yt=null,ytReady=false,wantPlay=false,mbtn=document.getElementById('musicBtn');
+  var SONG_ID='u2ah9tWTkmk',SONG_START=32,yt=null,ytReady=false,wantPlay=false,mbtn=document.getElementById('musicBtn');
   window.onYouTubeIframeAPIReady=function(){
     yt=new YT.Player('ytPlayer',{videoId:SONG_ID,playerVars:{start:SONG_START,playsinline:1,rel:0,modestbranding:1},
       events:{onReady:function(){ytReady=true;if(wantPlay){yt.unMute();yt.playVideo();}},
