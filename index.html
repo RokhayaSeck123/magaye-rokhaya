@@ -155,18 +155,6 @@ body.pre .plate>*{opacity:0;transform:translateY(10px);filter:blur(3px)}
 
 
 
-.float-player{position:fixed;right:calc(18px + env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:30;width:200px;height:200px;transition:opacity .5s ease,transform .5s ease;transform-origin:100% 100%}
-.float-player:not(.show){opacity:0;transform:scale(.4);pointer-events:none}
-.fp-ring{position:absolute;inset:-7px;border-radius:50%;background:repeating-conic-gradient(#a87d32 0 9deg,#f3dc9c 9deg 18deg);box-shadow:0 14px 30px -10px rgba(63,40,24,.6)}
-.float-player.on .fp-ring{animation:spin 8s linear infinite}
-.fp-clip{position:absolute;inset:0;border-radius:50%;overflow:hidden;background:#1c120a}
-.fp-clip>div,.fp-clip iframe{position:absolute;top:0;left:-56px;width:312px;height:200px;border:0}
-.fp-close{position:absolute;top:-6px;left:-6px;z-index:2;width:34px;height:34px;border-radius:50%;border:1px solid var(--gold);background:var(--ink-deep);color:var(--gold-light);font-size:20px;line-height:1;display:grid;place-items:center;cursor:pointer;padding:0}
-.fp-close:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-.music-btn{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:30;width:48px;height:48px;border-radius:50%;border:1px solid var(--gold);background:var(--ink-deep);color:var(--gold-light);display:grid;place-items:center;cursor:pointer;box-shadow:0 8px 20px -8px rgba(63,40,24,.6)}
-.music-btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
-.music-btn.on svg{animation:spin 6s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
 
 /* =============== HEADER =============== */
 .bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--ink-deep);color:var(--gold-light)}
@@ -404,8 +392,7 @@ h2{font-family:var(--script);font-weight:400;font-size:clamp(42px,12cqi,54px);li
     <p class="foot rv">Mr &amp; Mrs Ndiaye</p>
   </section>
 </main>
-<div class="float-player" id="floatPlayer" aria-label="Ordinary, Alex Warren"><span class="fp-ring" aria-hidden="true"></span><div class="fp-clip"><div id="ytPlayer"></div></div><button class="fp-close" id="fpClose" type="button" aria-label="Réduire et mettre la musique en pause">×</button></div>
-<button class="music-btn" id="musicBtn" type="button" aria-label="Ouvrir le lecteur et lancer la musique" hidden><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="6" cy="18" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="17" cy="16" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+
 
 
 <script>
@@ -773,7 +760,7 @@ h2{font-family:var(--script);font-weight:400;font-size:clamp(42px,12cqi,54px);li
   /* ---------- envelope: bow drops, doors open, card rises and fills the screen ---------- */
   var ov=document.getElementById('enveloppe'),btn=document.getElementById('envBtn'),card=document.getElementById('envCard');
   document.body.classList.add('locked','pre');
-  function finish(){opened=true;ov.hidden=true;document.getElementById('floatPlayer').classList.add('show');document.body.classList.remove('locked');requestAnimationFrame(function(){document.body.classList.remove('pre');startFx();});}
+  function finish(){opened=true;ov.hidden=true;document.body.classList.remove('locked');requestAnimationFrame(function(){document.body.classList.remove('pre');startFx();});}
   function flyCard(){
     window.scrollTo(0,0);
     var cur=card.style.transform;
@@ -787,7 +774,6 @@ h2{font-family:var(--script);font-weight:400;font-size:clamp(42px,12cqi,54px);li
   }
   btn.addEventListener('click',function(){
     if(ov.classList.contains('drop'))return;
-    startSong();
     if(reduce){finish();return;}
     paintCard();
     ov.classList.add('drop');
@@ -797,18 +783,6 @@ h2{font-family:var(--script);font-weight:400;font-size:clamp(42px,12cqi,54px);li
     setTimeout(finish,4400);
   });
 
-
-  /* ---------- "Ordinary" via the official YouTube player (visible medallion) ---------- */
-  var SONG_ID='u2ah9tWTkmk',SONG_START=32,yt=null,ytReady=false,wantPlay=false,mbtn=document.getElementById('musicBtn'),fp=document.getElementById('floatPlayer');
-  window.onYouTubeIframeAPIReady=function(){
-    yt=new YT.Player('ytPlayer',{videoId:SONG_ID,playerVars:{start:SONG_START,playsinline:1,rel:0,modestbranding:1},
-      events:{onReady:function(){ytReady=true;if(wantPlay){yt.unMute();yt.seekTo(SONG_START,true);yt.playVideo();}},
-              onStateChange:function(e){var on=e.data===1;mbtn.classList.toggle('on',on);fp.classList.toggle('on',on);mbtn.setAttribute('aria-label',on?'Mettre la musique en pause':'Lancer la musique');}}});
-  };
-  (function(){var t=document.createElement('script');t.src='https://www.youtube.com/iframe_api';t.async=true;document.head.appendChild(t);})();
-  function startSong(){wantPlay=true;if(ytReady){try{yt.unMute();yt.seekTo(SONG_START,true);yt.playVideo();}catch(e){}}}
-  mbtn.addEventListener('click',function(){fp.classList.add('show');mbtn.hidden=true;if(ytReady){yt.unMute();yt.playVideo();}});
-  document.getElementById('fpClose').addEventListener('click',function(){if(ytReady)yt.pauseVideo();fp.classList.remove('show');mbtn.hidden=false;});
 
   /* ---------- menu ---------- */
   var mb=document.getElementById('menuBtn'),menu=document.getElementById('menu');
